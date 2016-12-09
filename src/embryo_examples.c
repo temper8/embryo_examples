@@ -1,5 +1,7 @@
 #include "embryo_examples.h"
 
+#define EDJ_FILE "edje/embryo_pong.edj"
+
 typedef struct appdata {
 	Evas_Object *win;
 	Evas_Object *conform;
@@ -35,21 +37,35 @@ naviframe_pop_cb(void *data, Elm_Object_Item *it)
 	return EINA_FALSE;
 }
 
+static void
+app_get_resource(const char *edj_file_in, char *edj_path_out, int edj_path_max)
+{
+	char *res_path = app_get_resource_path();
+	if (res_path) {
+		snprintf(edj_path_out, edj_path_max, "%s%s", res_path, edj_file_in);
+		free(res_path);
+	}
+}
+
+
 void
 accessibility_cb(void *data, Evas_Object *obj, void *event_info)
 {
+	char edj_path[PATH_MAX] = {0, };
 	Evas_Object *layout;
 	Evas_Object *nf = data;
 
 	layout = elm_layout_add(nf);
-	//elm_layout_file_set(ad->layout, edj_path, GRP_MAIN);
-	elm_layout_theme_set(layout, "layout", "nocontents", "default");
-	elm_object_part_text_set(layout, "elm.text", "Hello Tizen");
+
+	app_get_resource(EDJ_FILE, edj_path, (int)PATH_MAX);
+	elm_layout_file_set(layout, edj_path, "main");
+
+//	elm_layout_theme_set(layout, "layout", "nocontents", "default");
+//	elm_object_part_text_set(layout, "elm.text", "Hello Tizen");
+
 	evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	//eext_object_event_callback_add(ad->layout, EEXT_CALLBACK_BACK, layout_back_cb, ad);
 	//elm_object_content_set(ad->conform, ad->layout);
-
-
 
 	elm_naviframe_item_push(nf, "Embryo Pong", NULL, NULL, layout, NULL);
 }
