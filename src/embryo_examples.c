@@ -3,7 +3,8 @@
 typedef struct appdata {
 	Evas_Object *win;
 	Evas_Object *conform;
-	Evas_Object *label;
+	Evas_Object *nf;
+	Evas_Object *layout;
 } appdata_s;
 
 static void
@@ -19,6 +20,60 @@ win_back_cb(void *data, Evas_Object *obj, void *event_info)
 	/* Let window go to hide state. */
 	elm_win_lower(ad->win);
 }
+
+
+static void
+create_list_view(appdata_s *ad)
+{
+	Evas_Object *list;
+	Evas_Object *nf = ad->nf;
+	Elm_Object_Item *nf_it;
+	char buf[100] = { 0, };
+
+	/* List */
+	list = elm_list_add(nf);
+	elm_list_mode_set(list, ELM_LIST_COMPRESS);
+//	evas_object_smart_callback_add(list, "selected", list_selected_cb, NULL);
+
+	/* Main Menu Items Here */
+	elm_list_item_append(list, "Accessibility", NULL, NULL, NULL, nf);
+
+/*	elm_list_item_append(list, "Accessibility", NULL, NULL, accessibility_cb, nf);
+	elm_list_item_append(list, "Bg", NULL, NULL, bg_cb, nf);
+	elm_list_item_append(list, "Button", NULL, NULL, button_cb, nf);
+	elm_list_item_append(list, "Calendar", NULL, NULL, calendar_cb, nf);
+	elm_list_item_append(list, "Check", NULL, NULL, check_cb, nf);
+	elm_list_item_append(list, "Colorselector", NULL, NULL, colorselector_cb, nf);
+	elm_list_item_append(list, "Ctxpopup", NULL, NULL, ctxpopup_cb, nf);
+	elm_list_item_append(list, "Datetime", NULL, NULL, datetime_cb, ad);
+	elm_list_item_append(list, "Entry", NULL, NULL, entry_cb, nf);
+	elm_list_item_append(list, "Fastscroll", NULL, NULL, fastscroll_cb, nf);
+	elm_list_item_append(list, "Flipselector", NULL, NULL, flipselector_cb, nf);
+	elm_list_item_append(list, "Gengrid", NULL, NULL, gengrid_cb, nf);
+	elm_list_item_append(list, "Genlist", NULL, NULL, genlist_cb, nf);
+	elm_list_item_append(list, "Handler", NULL, NULL, handler_cb, nf);
+	elm_list_item_append(list, "Hoversel", NULL, NULL, hoversel_cb, nf);
+	elm_list_item_append(list, "Indicator", NULL, NULL, indicator_cb, ad);
+	elm_list_item_append(list, "Label", NULL, NULL, label_cb, nf);
+	elm_list_item_append(list, "Multibuttonentry", NULL, NULL, multibuttonentry_cb, nf);
+	elm_list_item_append(list, "Naviframe", NULL, NULL, naviframe_cb, nf);
+	elm_list_item_append(list, "Nocontents", NULL, NULL, nocontents_cb, nf);
+	elm_list_item_append(list, "Pagecontrol", NULL, NULL, pagecontrol_cb, nf);
+	elm_list_item_append(list, "Popup", NULL, NULL, popup_cb, ad);
+	elm_list_item_append(list, "Progressbar", NULL, NULL, progressbar_cb, nf);
+	elm_list_item_append(list, "Radio", NULL, NULL, radio_cb, nf);
+	elm_list_item_append(list, "Slider", NULL, NULL, slider_cb, nf);
+	elm_list_item_append(list, "Spinner", NULL, NULL, spinner_cb, nf);
+	elm_list_item_append(list, "Toolbar", NULL, NULL, toolbar_cb, nf);*/
+
+	elm_list_go(list);
+
+	snprintf(buf, 100, "Tizen UI :: scale[%1.1f]", elm_config_scale_get());
+	nf_it = elm_naviframe_item_push(nf, buf, NULL, NULL, list, NULL);
+//	elm_naviframe_item_pop_cb_set(nf_it, naviframe_pop_cb, ad->win);
+}
+
+
 
 static void
 create_base_gui(appdata_s *ad)
@@ -48,13 +103,24 @@ create_base_gui(appdata_s *ad)
 	elm_win_resize_object_add(ad->win, ad->conform);
 	evas_object_show(ad->conform);
 
-	/* Label */
-	/* Create an actual view of the base gui.
-	   Modify this part to change the view. */
-	ad->label = elm_label_add(ad->conform);
-	elm_object_text_set(ad->label, "<align=center>Hello Tizen</align>");
-	evas_object_size_hint_weight_set(ad->label, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_object_content_set(ad->conform, ad->label);
+	/* Base Layout */
+	ad->layout = elm_layout_add(ad->conform);
+	evas_object_size_hint_weight_set(ad->layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	elm_layout_theme_set(ad->layout, "layout", "application", "default");
+	evas_object_show(ad->layout);
+
+	elm_object_content_set(ad->conform, ad->layout);
+
+
+	/* Naviframe */
+	ad->nf = elm_naviframe_add(ad->layout);
+	/* Push a previous button to naviframe item automatically */
+	elm_naviframe_prev_btn_auto_pushed_set(ad->nf, EINA_TRUE);
+	create_list_view(ad);
+	elm_object_part_content_set(ad->layout, "elm.swallow.content", ad->nf);
+//	eext_object_event_callback_add(ad->nf, EEXT_CALLBACK_BACK, eext_naviframe_back_cb, NULL);
+//	eext_object_event_callback_add(ad->nf, EEXT_CALLBACK_MORE, eext_naviframe_more_cb, NULL);
+
 
 	/* Show window after base gui is set up */
 	evas_object_show(ad->win);
