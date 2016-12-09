@@ -21,6 +21,39 @@ win_back_cb(void *data, Evas_Object *obj, void *event_info)
 	elm_win_lower(ad->win);
 }
 
+static void
+list_selected_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	Elm_Object_Item *it = event_info;
+	elm_list_item_selected_set(it, EINA_FALSE);
+}
+
+static Eina_Bool
+naviframe_pop_cb(void *data, Elm_Object_Item *it)
+{
+	ui_app_exit();
+	return EINA_FALSE;
+}
+
+void
+accessibility_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	Evas_Object *layout;
+	Evas_Object *nf = data;
+
+	layout = elm_layout_add(nf);
+	//elm_layout_file_set(ad->layout, edj_path, GRP_MAIN);
+	elm_layout_theme_set(layout, "layout", "nocontents", "default");
+	elm_object_part_text_set(layout, "elm.text", "Hello Tizen");
+	evas_object_size_hint_weight_set(layout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+	//eext_object_event_callback_add(ad->layout, EEXT_CALLBACK_BACK, layout_back_cb, ad);
+	//elm_object_content_set(ad->conform, ad->layout);
+
+
+
+	elm_naviframe_item_push(nf, "Embryo Pong", NULL, NULL, layout, NULL);
+}
+
 
 static void
 create_list_view(appdata_s *ad)
@@ -33,10 +66,10 @@ create_list_view(appdata_s *ad)
 	/* List */
 	list = elm_list_add(nf);
 	elm_list_mode_set(list, ELM_LIST_COMPRESS);
-//	evas_object_smart_callback_add(list, "selected", list_selected_cb, NULL);
+	evas_object_smart_callback_add(list, "selected", list_selected_cb, NULL);
 
 	/* Main Menu Items Here */
-	elm_list_item_append(list, "Accessibility", NULL, NULL, NULL, nf);
+	elm_list_item_append(list, "Embryo Pong", NULL, NULL, accessibility_cb, nf);
 
 /*	elm_list_item_append(list, "Accessibility", NULL, NULL, accessibility_cb, nf);
 	elm_list_item_append(list, "Bg", NULL, NULL, bg_cb, nf);
@@ -70,7 +103,7 @@ create_list_view(appdata_s *ad)
 
 	snprintf(buf, 100, "Tizen UI :: scale[%1.1f]", elm_config_scale_get());
 	nf_it = elm_naviframe_item_push(nf, buf, NULL, NULL, list, NULL);
-//	elm_naviframe_item_pop_cb_set(nf_it, naviframe_pop_cb, ad->win);
+	elm_naviframe_item_pop_cb_set(nf_it, naviframe_pop_cb, ad->win);
 }
 
 
