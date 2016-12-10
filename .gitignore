@@ -3,6 +3,7 @@ Debug
 .sdk_delta.info
 .exportMap 
 .rds_delta 
+*.edj
 
 # Windows image file caches
 Thumbs.db
