@@ -1,5 +1,7 @@
 #include "embryo_examples.h"
 
+#include "embryo_list_loader.h"
+
 #define EDJ_FILE "edje/embryo_pong.edj"
 
 typedef struct appdata {
@@ -78,6 +80,9 @@ create_list_view(appdata_s *ad)
 	Evas_Object *nf = ad->nf;
 	Elm_Object_Item *nf_it;
 	char buf[100] = { 0, };
+
+
+	embryo_list_loader();
 
 	/* List */
 	list = elm_list_add(nf);

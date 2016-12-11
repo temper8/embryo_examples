@@ -8,8 +8,9 @@
 #ifndef EMBRYO_LIST_LOADER_H_
 #define EMBRYO_LIST_LOADER_H_
 
-#include <dlog.h>
+#include "logger.h"
 
+int embryo_list_loader();
 
 
 #endif /* EMBRYO_LIST_LOADER_H_ */
