@@ -8,10 +8,55 @@
 
 #include "embryo_list_loader.h"
 
+#include <Elementary.h>
+#include <app.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "jsmn.h"
+
+
+void readJSONfile(const char *file_name){
+
+	char file_path[PATH_MAX] = {0, };
+
+	char *res_path = app_get_resource_path();
+	if (res_path) {
+		snprintf(file_path, (int)PATH_MAX, "%s%s", res_path, file_name);
+		free(res_path);
+	}
+
+	DBG("file_path = %s", file_path);
+
+	off_t file_size;
+	char *buffer;
+	struct stat stbuf;
+	FILE *fp;
+
+	fp = fopen(file_path,  "r");
+
+	if (fp == NULL) {
+		DBG("Cannot open file.");
+	}
+
+	int fd = fileno(fp);
+
+	if ((fstat(fd, &stbuf) != 0) || (!S_ISREG(stbuf.st_mode))) {
+		DBG("Handle error");
+	}
+
+	file_size = stbuf.st_size;
+
+	DBG("file_size =%d ", file_size);
+
+	buffer = (char*)malloc(file_size);
+	if (buffer == NULL) {
+		DBG("Handle error");
+	}
+
+}
+
 
 /*
  * A small example of jsmn parsing when JSON structure is known and number of
@@ -35,6 +80,9 @@ int embryo_list_loader() {
 	int r;
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
+
+	readJSONfile("embyo_list.json");
+
 
 	jsmn_init(&p);
 	r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
@@ -84,3 +132,7 @@ int embryo_list_loader() {
 	}
 	return EXIT_SUCCESS;
 }
+
+
+
+

@@ -7,4 +7,9 @@
         <label>embryo_examples</label>
         <icon>embryo_examples.png</icon>
     </ui-application>
+    <privileges>
+        <privilege>http://tizen.org/privilege/mediastorage</privilege>
+        <privilege>http://tizen.org/privilege/externalstorage.appdata</privilege>
+        <privilege>http://tizen.org/privilege/externalstorage</privilege>
+    </privileges>
 </manifest>
