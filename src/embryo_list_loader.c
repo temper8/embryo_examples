@@ -16,7 +16,19 @@
 #include <string.h>
 #include "jsmn.h"
 
-static char *json_buffer[4000] = {0, };
+/*
+ * A small example of jsmn parsing when JSON structure is known and number of
+ * tokens is predictable.
+ */
+/*
+static const char *JSON_STRING =
+	"{\"user\": \"johndoe\", \"admin\": false, \"uid\": 1000,\n  "
+	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
+*/
+
+static char JSON_STRING[4000] = {0, };
+
+
 
 int readJSONtoBuffer(const char *file_name){
 
@@ -51,25 +63,13 @@ int readJSONtoBuffer(const char *file_name){
 
 	DBG("file_size =%d ", file_size);
 
-	/*json_buffer = (char*)malloc(file_size);
-	if (json_buffer == NULL) {
-		DBG("Handle error");
-	}
-*/
-	fread(json_buffer, file_size, 1, fp);
+	fread(JSON_STRING, file_size, 1, fp);
 
  return file_size;
 }
 
 
-/*
- * A small example of jsmn parsing when JSON structure is known and number of
- * tokens is predictable.
- */
 
-static const char *JSON_STRING =
-	"{\"user\": \"johndoe\", \"admin\": false, \"uid\": 1000,\n  "
-	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
 
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
@@ -87,11 +87,11 @@ int embryo_list_loader() {
 
 	int len = readJSONtoBuffer("embyo_list.json");
 
-	DBG("%s", json_buffer);
+	DBG("%s", JSON_STRING);
 
 	jsmn_init(&p);
 	//r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
-	r = jsmn_parse(&p, json_buffer, len, t, sizeof(t)/sizeof(t[0]));
+	r = jsmn_parse(&p, JSON_STRING, len, t, sizeof(t)/sizeof(t[0]));
 	if (r < 0) {
 		DBG("Failed to parse JSON: %d\n", r);
 		return 1;
@@ -105,9 +105,21 @@ int embryo_list_loader() {
 
 	/* Loop over all keys of the root object */
 	for (i = 1; i < r; i++) {
-		if (jsoneq(JSON_STRING, &t[i], "elist") == 0) {
+		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
+			/* We may use strndup() to fetch string value */
+			DBG("- User: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+			i++;
+		} else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
+			/* We may additionally check if the value is either "true" or "false" */
+			DBG("- Admin: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
+			i++;
+		} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
+			/* We may want to do strtol() here to get numeric value */
+			DBG("- UID: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+			i++;
+		} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
 			int j;
-			DBG("- elist:\n");
+			DBG("- Groups:\n");
 			if (t[i+1].type != JSMN_ARRAY) {
 				continue; /* We expect groups to be an array of strings */
 			}
