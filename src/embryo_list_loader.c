@@ -16,7 +16,7 @@
 #include <string.h>
 #include "jsmn.h"
 
-char *json_buffer;
+static char *json_buffer[4000] = {0, };
 
 int readJSONtoBuffer(const char *file_name){
 
@@ -51,11 +51,11 @@ int readJSONtoBuffer(const char *file_name){
 
 	DBG("file_size =%d ", file_size);
 
-	json_buffer = (char*)malloc(file_size);
+	/*json_buffer = (char*)malloc(file_size);
 	if (json_buffer == NULL) {
 		DBG("Handle error");
 	}
-
+*/
 	fread(json_buffer, file_size, 1, fp);
 
  return file_size;
@@ -105,24 +105,9 @@ int embryo_list_loader() {
 
 	/* Loop over all keys of the root object */
 	for (i = 1; i < r; i++) {
-		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-			/* We may use strndup() to fetch string value */
-			DBG("- User: %.*s\n", t[i+1].end-t[i+1].start,
-					JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
-			/* We may additionally check if the value is either "true" or "false" */
-			DBG("- Admin: %.*s\n", t[i+1].end-t[i+1].start,
-					JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-			/* We may want to do strtol() here to get numeric value */
-			DBG("- UID: %.*s\n", t[i+1].end-t[i+1].start,
-					JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
+		if (jsoneq(JSON_STRING, &t[i], "elist") == 0) {
 			int j;
-			DBG("- Groups:\n");
+			DBG("- elist:\n");
 			if (t[i+1].type != JSMN_ARRAY) {
 				continue; /* We expect groups to be an array of strings */
 			}

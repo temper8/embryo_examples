@@ -1,0 +1,2 @@
+{"user": "johndoe", "admin": false, "uid": 1000, 
+"groups": ["users", "wheel", "audio", "video"]}
