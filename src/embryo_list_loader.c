@@ -16,8 +16,9 @@
 #include <string.h>
 #include "jsmn.h"
 
+char *json_buffer;
 
-void readJSONfile(const char *file_name){
+int readJSONtoBuffer(const char *file_name){
 
 	char file_path[PATH_MAX] = {0, };
 
@@ -30,7 +31,7 @@ void readJSONfile(const char *file_name){
 	DBG("file_path = %s", file_path);
 
 	off_t file_size;
-	char *buffer;
+
 	struct stat stbuf;
 	FILE *fp;
 
@@ -50,11 +51,14 @@ void readJSONfile(const char *file_name){
 
 	DBG("file_size =%d ", file_size);
 
-	buffer = (char*)malloc(file_size);
-	if (buffer == NULL) {
+	json_buffer = (char*)malloc(file_size);
+	if (json_buffer == NULL) {
 		DBG("Handle error");
 	}
 
+	fread(json_buffer, file_size, 1, fp);
+
+ return file_size;
 }
 
 
@@ -81,11 +85,13 @@ int embryo_list_loader() {
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
 
-	readJSONfile("embyo_list.json");
+	int len = readJSONtoBuffer("embyo_list.json");
 
+	DBG("%s", json_buffer);
 
 	jsmn_init(&p);
-	r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
+	//r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
+	r = jsmn_parse(&p, json_buffer, len, t, sizeof(t)/sizeof(t[0]));
 	if (r < 0) {
 		DBG("Failed to parse JSON: %d\n", r);
 		return 1;
