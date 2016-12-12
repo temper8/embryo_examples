@@ -14,7 +14,7 @@
 typedef struct {
 	char *title;
 	char *description;
-	char *filename;
+	char *edj_file;
 } embryo_item_t;
 
 

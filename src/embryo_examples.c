@@ -61,7 +61,7 @@ accessibility_cb(void *data, Evas_Object *obj, void *event_info)
 
 	layout = elm_layout_add(my_nf);
 
-	app_get_resource(embryo_item->filename, edj_path, (int)PATH_MAX);
+	app_get_resource(embryo_item->edj_file, edj_path, (int)PATH_MAX);
 	DBG("edj_path = %s", edj_path);
 	elm_layout_file_set(layout, edj_path, "main");
 
