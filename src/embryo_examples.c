@@ -11,6 +11,8 @@ typedef struct appdata {
 	Evas_Object *layout;
 } appdata_s;
 
+static Evas_Object *my_nf;
+
 static void
 win_delete_request_cb(void *data, Evas_Object *obj, void *event_info)
 {
@@ -55,9 +57,9 @@ accessibility_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	char edj_path[PATH_MAX] = {0, };
 	Evas_Object *layout;
-	Evas_Object *nf = data;
+	//Evas_Object *nf = data;
 
-	layout = elm_layout_add(nf);
+	layout = elm_layout_add(my_nf);
 
 	app_get_resource(EDJ_FILE, edj_path, (int)PATH_MAX);
 	elm_layout_file_set(layout, edj_path, "main");
@@ -69,7 +71,7 @@ accessibility_cb(void *data, Evas_Object *obj, void *event_info)
 	//eext_object_event_callback_add(ad->layout, EEXT_CALLBACK_BACK, layout_back_cb, ad);
 	//elm_object_content_set(ad->conform, ad->layout);
 
-	elm_naviframe_item_push(nf, "Embryo Pong", NULL, NULL, layout, NULL);
+	elm_naviframe_item_push(my_nf, "Embryo Pong", NULL, NULL, layout, NULL);
 }
 
 
@@ -143,6 +145,7 @@ create_base_gui(appdata_s *ad)
 
 	/* Naviframe */
 	ad->nf = elm_naviframe_add(ad->layout);
+	my_nf = ad->nf;
 	/* Push a previous button to naviframe item automatically */
 	elm_naviframe_prev_btn_auto_pushed_set(ad->nf, EINA_TRUE);
 	create_list_view(ad);
