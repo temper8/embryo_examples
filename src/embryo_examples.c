@@ -57,11 +57,12 @@ accessibility_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	char edj_path[PATH_MAX] = {0, };
 	Evas_Object *layout;
-	//Evas_Object *nf = data;
+	embryo_item_t *embryo_item = data;
 
 	layout = elm_layout_add(my_nf);
 
-	app_get_resource(EDJ_FILE, edj_path, (int)PATH_MAX);
+	app_get_resource(embryo_item->filename, edj_path, (int)PATH_MAX);
+	DBG("edj_path = %s", edj_path);
 	elm_layout_file_set(layout, edj_path, "main");
 
 //	elm_layout_theme_set(layout, "layout", "nocontents", "default");
@@ -71,7 +72,7 @@ accessibility_cb(void *data, Evas_Object *obj, void *event_info)
 	//eext_object_event_callback_add(ad->layout, EEXT_CALLBACK_BACK, layout_back_cb, ad);
 	//elm_object_content_set(ad->conform, ad->layout);
 
-	elm_naviframe_item_push(my_nf, "Embryo Pong", NULL, NULL, layout, NULL);
+	elm_naviframe_item_push(my_nf, embryo_item->title, NULL, NULL, layout, NULL);
 }
 
 
@@ -93,9 +94,8 @@ create_list_view(appdata_s *ad)
 
 	/* Main Menu Items Here */
 	for (i=0;i<n;i++){
-		elm_list_item_append(list, embryo_list[i].title, NULL, NULL, accessibility_cb, nf);
+		elm_list_item_append(list, embryo_list[i].title, NULL, NULL, accessibility_cb, (void* ) (&embryo_list[i]));
 	}
-
 
 	elm_list_go(list);
 

@@ -136,6 +136,7 @@ int embryo_list_loader() {
 								j++;
 							} else if (jsoneq(JSON_STRING, &t[i], "edj_file") == 0) {
 								DBG("- edj_file: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+								embryo_list[n].filename = strndup(	JSON_STRING + t[i+1].start, t[i+1].end-t[i+1].start);
 								j++;
 							} else {
 								DBG("Unexpected key: %.*s\n", t[i].end-t[i].start,
