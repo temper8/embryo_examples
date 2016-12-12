@@ -95,34 +95,6 @@ create_list_view(appdata_s *ad)
 	}
 
 
-/*	elm_list_item_append(list, "Accessibility", NULL, NULL, accessibility_cb, nf);
-	elm_list_item_append(list, "Bg", NULL, NULL, bg_cb, nf);
-	elm_list_item_append(list, "Button", NULL, NULL, button_cb, nf);
-	elm_list_item_append(list, "Calendar", NULL, NULL, calendar_cb, nf);
-	elm_list_item_append(list, "Check", NULL, NULL, check_cb, nf);
-	elm_list_item_append(list, "Colorselector", NULL, NULL, colorselector_cb, nf);
-	elm_list_item_append(list, "Ctxpopup", NULL, NULL, ctxpopup_cb, nf);
-	elm_list_item_append(list, "Datetime", NULL, NULL, datetime_cb, ad);
-	elm_list_item_append(list, "Entry", NULL, NULL, entry_cb, nf);
-	elm_list_item_append(list, "Fastscroll", NULL, NULL, fastscroll_cb, nf);
-	elm_list_item_append(list, "Flipselector", NULL, NULL, flipselector_cb, nf);
-	elm_list_item_append(list, "Gengrid", NULL, NULL, gengrid_cb, nf);
-	elm_list_item_append(list, "Genlist", NULL, NULL, genlist_cb, nf);
-	elm_list_item_append(list, "Handler", NULL, NULL, handler_cb, nf);
-	elm_list_item_append(list, "Hoversel", NULL, NULL, hoversel_cb, nf);
-	elm_list_item_append(list, "Indicator", NULL, NULL, indicator_cb, ad);
-	elm_list_item_append(list, "Label", NULL, NULL, label_cb, nf);
-	elm_list_item_append(list, "Multibuttonentry", NULL, NULL, multibuttonentry_cb, nf);
-	elm_list_item_append(list, "Naviframe", NULL, NULL, naviframe_cb, nf);
-	elm_list_item_append(list, "Nocontents", NULL, NULL, nocontents_cb, nf);
-	elm_list_item_append(list, "Pagecontrol", NULL, NULL, pagecontrol_cb, nf);
-	elm_list_item_append(list, "Popup", NULL, NULL, popup_cb, ad);
-	elm_list_item_append(list, "Progressbar", NULL, NULL, progressbar_cb, nf);
-	elm_list_item_append(list, "Radio", NULL, NULL, radio_cb, nf);
-	elm_list_item_append(list, "Slider", NULL, NULL, slider_cb, nf);
-	elm_list_item_append(list, "Spinner", NULL, NULL, spinner_cb, nf);
-	elm_list_item_append(list, "Toolbar", NULL, NULL, toolbar_cb, nf);*/
-
 	elm_list_go(list);
 
 	snprintf(buf, 100, "Tizen UI :: scale[%1.1f]", elm_config_scale_get());
