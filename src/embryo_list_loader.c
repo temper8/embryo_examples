@@ -81,7 +81,7 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 
 int embryo_list_loader() {
 
-	int number_of_embryo;
+	int number_of_embryo = 0;
 	int i;
 	int r;
 	jsmn_parser p;
@@ -125,10 +125,8 @@ int embryo_list_loader() {
 						int count = 2*g->size;
 						int j;
 						for (j = 0; j < count; j++) {
-							//g = &t[k + j + 1];
 							i = k + j + 1;
-							//DBG(" xxx * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-							if (jsoneq(JSON_STRING, &t[i], "title") == 0) {
+								if (jsoneq(JSON_STRING, &t[i], "title") == 0) {
 								DBG("- title: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 								embryo_list[n].title = strndup(	JSON_STRING + t[i+1].start, t[i+1].end-t[i+1].start);
 								j++;
@@ -136,8 +134,8 @@ int embryo_list_loader() {
 
 								DBG("- description: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
 								j++;
-							} else if (jsoneq(JSON_STRING, &t[i], "filename") == 0) {
-								DBG("- filename: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+							} else if (jsoneq(JSON_STRING, &t[i], "edj_file") == 0) {
+								DBG("- edj_file: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 								j++;
 							} else {
 								DBG("Unexpected key: %.*s\n", t[i].end-t[i].start,

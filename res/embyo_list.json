@@ -1,5 +1,5 @@
-{ "em": [ {"title": "Embryo ping-pong", "description": "ping-pong", "filename": "embryo_pong.edc"},
-		{"title": "johndoe2", "description": "false2", "filename": "title2.edc"},
-		{"title": "johndoe3", "description": "false3", "filename": "title3.edc"}
+{ "em": [ {"title": "Embryo ping-pong", "description": "ping-pong", "edj_file": "edje/embryo_pong.edj"},
+		{"title": "johndoe2", "description": "false2", "edj_file": "title2.edc"},
+		{"title": "johndoe3", "description": "false3", "edj_file": "title3.edc"}
 		]
 }
