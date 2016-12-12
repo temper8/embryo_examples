@@ -111,18 +111,32 @@ int embryo_list_loader() {
 					DBG("- size: %d", t[1+1].size);
 					/* We expect groups to be an array of strings */
 					int k = 3;
-					for (i = 0; i < t[1+1].size; i++) {
+					int n;
+					for (n = 0;  n< t[1+1].size; n++) {
 						jsmntok_t *g = &t[k];
 						DBG("* %.*s\n", g->end - g->start, JSON_STRING + g->start);
 						DBG("- size: %d", g->size);
 						int count = 2*g->size;
 						int j;
 						for (j = 0; j < count; j++) {
-							g = &t[k +j + 1];
-							DBG(" xxx * %.*s\n", g->end - g->start, JSON_STRING + g->start);
+							//g = &t[k + j + 1];
+							i = k + j + 1;
+							//DBG(" xxx * %.*s\n", g->end - g->start, JSON_STRING + g->start);
+							if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
+								DBG("- User: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+								j++;
+							} else  if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
+
+								DBG("- Admin: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
+								j++;
+							} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
+								DBG("- UID: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+								j++;
+							} else {
+								DBG("Unexpected key: %.*s\n", t[i].end-t[i].start,
+										JSON_STRING + t[i].start);
+							}
 						}
-
-
 						k += count +1;
 					}
 				}
