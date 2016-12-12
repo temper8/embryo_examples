@@ -1,2 +1,5 @@
-{"user": "johndoe", "admin": false, "uid": 1000, 
-"groups": ["users", "wheel", "audio", "video"]}
+{ "em": [ {"user": "johndoe", "admin": false, "uid": 1000, "groups": "title" },
+		{"user": "johndoe2", "admin": false, "uid": 1001, "groups": "title"},
+		{"user": "johndoe3", "admin": false, "uid": 1002, "groups": "title"}
+		]
+}

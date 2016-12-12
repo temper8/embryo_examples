@@ -104,24 +104,46 @@ int embryo_list_loader() {
 	}
 
 	/* Loop over all keys of the root object */
+
+	if (jsoneq(JSON_STRING, &t[1], "em") == 0) {
+				DBG("- em:\n");
+				if (t[1+1].type == JSMN_ARRAY) {
+					DBG("- size: %d", t[1+1].size);
+					/* We expect groups to be an array of strings */
+					int k = 3;
+					for (i = 0; i < t[1+1].size; i++) {
+						jsmntok_t *g = &t[k];
+						DBG("* %.*s\n", g->end - g->start, JSON_STRING + g->start);
+						DBG("- size: %d", g->size);
+						int count = 2*g->size;
+						int j;
+						for (j = 0; j < count; j++) {
+							g = &t[k +j + 1];
+							DBG(" xxx * %.*s\n", g->end - g->start, JSON_STRING + g->start);
+						}
+
+
+						k += count +1;
+					}
+				}
+	}
+	/*
 	for (i = 1; i < r; i++) {
 		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-			/* We may use strndup() to fetch string value */
 			DBG("- User: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 			i++;
 		} else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
-			/* We may additionally check if the value is either "true" or "false" */
+
 			DBG("- Admin: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
 			i++;
 		} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-			/* We may want to do strtol() here to get numeric value */
 			DBG("- UID: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 			i++;
 		} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
 			int j;
 			DBG("- Groups:\n");
 			if (t[i+1].type != JSMN_ARRAY) {
-				continue; /* We expect groups to be an array of strings */
+				continue;
 			}
 			for (j = 0; j < t[i+1].size; j++) {
 				jsmntok_t *g = &t[i+j+2];
@@ -133,6 +155,7 @@ int embryo_list_loader() {
 					JSON_STRING + t[i].start);
 		}
 	}
+	*/
 	return EXIT_SUCCESS;
 }
 
