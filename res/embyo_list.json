@@ -1,5 +1,5 @@
-{ "em": [ {"user": "johndoe", "admin": false, "uid": 1000, "groups": "title" },
-		{"user": "johndoe2", "admin": false, "uid": 1001, "groups": "title"},
-		{"user": "johndoe3", "admin": false, "uid": 1002, "groups": "title"}
+{ "em": [ {"title": "Embryo ping-pong", "description": "ping-pong", "filename": "embryo_pong.edc"},
+		{"title": "johndoe2", "description": "false2", "filename": "title2.edc"},
+		{"title": "johndoe3", "description": "false3", "filename": "title3.edc"}
 		]
 }

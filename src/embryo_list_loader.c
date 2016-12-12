@@ -122,15 +122,15 @@ int embryo_list_loader() {
 							//g = &t[k + j + 1];
 							i = k + j + 1;
 							//DBG(" xxx * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-							if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-								DBG("- User: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+							if (jsoneq(JSON_STRING, &t[i], "title") == 0) {
+								DBG("- title: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 								j++;
-							} else  if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
+							} else  if (jsoneq(JSON_STRING, &t[i], "description") == 0) {
 
-								DBG("- Admin: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
+								DBG("- description: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
 								j++;
-							} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-								DBG("- UID: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+							} else if (jsoneq(JSON_STRING, &t[i], "filename") == 0) {
+								DBG("- filename: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 								j++;
 							} else {
 								DBG("Unexpected key: %.*s\n", t[i].end-t[i].start,
