@@ -81,8 +81,8 @@ create_list_view(appdata_s *ad)
 	Elm_Object_Item *nf_it;
 	char buf[100] = { 0, };
 
-
-	embryo_list_loader();
+	int i;
+	int n = embryo_list_loader();
 
 	/* List */
 	list = elm_list_add(nf);
@@ -90,7 +90,10 @@ create_list_view(appdata_s *ad)
 	evas_object_smart_callback_add(list, "selected", list_selected_cb, NULL);
 
 	/* Main Menu Items Here */
-	elm_list_item_append(list, "Embryo Pong", NULL, NULL, accessibility_cb, nf);
+	for (i=0;i<n;i++){
+		elm_list_item_append(list, embryo_list[i].title, NULL, NULL, accessibility_cb, nf);
+	}
+
 
 /*	elm_list_item_append(list, "Accessibility", NULL, NULL, accessibility_cb, nf);
 	elm_list_item_append(list, "Bg", NULL, NULL, bg_cb, nf);

@@ -80,6 +80,8 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 }
 
 int embryo_list_loader() {
+
+	int number_of_embryo;
 	int i;
 	int r;
 	jsmn_parser p;
@@ -112,7 +114,11 @@ int embryo_list_loader() {
 					/* We expect groups to be an array of strings */
 					int k = 3;
 					int n;
-					for (n = 0;  n< t[1+1].size; n++) {
+					number_of_embryo = t[1+1].size;
+
+					embryo_list = (embryo_item_t*) malloc(number_of_embryo * sizeof(embryo_item_t));
+
+					for (n = 0;  n< number_of_embryo; n++) {
 						jsmntok_t *g = &t[k];
 						DBG("* %.*s\n", g->end - g->start, JSON_STRING + g->start);
 						DBG("- size: %d", g->size);
@@ -124,6 +130,7 @@ int embryo_list_loader() {
 							//DBG(" xxx * %.*s\n", g->end - g->start, JSON_STRING + g->start);
 							if (jsoneq(JSON_STRING, &t[i], "title") == 0) {
 								DBG("- title: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
+								embryo_list[n].title = strndup(	JSON_STRING + t[i+1].start, t[i+1].end-t[i+1].start);
 								j++;
 							} else  if (jsoneq(JSON_STRING, &t[i], "description") == 0) {
 
@@ -141,36 +148,8 @@ int embryo_list_loader() {
 					}
 				}
 	}
-	/*
-	for (i = 1; i < r; i++) {
-		if (jsoneq(JSON_STRING, &t[i], "user") == 0) {
-			DBG("- User: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "admin") == 0) {
 
-			DBG("- Admin: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "uid") == 0) {
-			DBG("- UID: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
-			i++;
-		} else if (jsoneq(JSON_STRING, &t[i], "groups") == 0) {
-			int j;
-			DBG("- Groups:\n");
-			if (t[i+1].type != JSMN_ARRAY) {
-				continue;
-			}
-			for (j = 0; j < t[i+1].size; j++) {
-				jsmntok_t *g = &t[i+j+2];
-				DBG("  * %.*s\n", g->end - g->start, JSON_STRING + g->start);
-			}
-			i += t[i+1].size + 1;
-		} else {
-			DBG("Unexpected key: %.*s\n", t[i].end-t[i].start,
-					JSON_STRING + t[i].start);
-		}
-	}
-	*/
-	return EXIT_SUCCESS;
+	return number_of_embryo;
 }
 
 

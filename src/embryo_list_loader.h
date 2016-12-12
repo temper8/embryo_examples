@@ -10,7 +10,19 @@
 
 #include "logger.h"
 
+
+typedef struct {
+	char *title;
+	char *description;
+	char *filename;
+} embryo_item_t;
+
+
+embryo_item_t *embryo_list;
+
 int embryo_list_loader();
+
+
 
 
 #endif /* EMBRYO_LIST_LOADER_H_ */
