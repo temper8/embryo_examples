@@ -99,7 +99,7 @@ create_list_view(appdata_s *ad)
 
 	elm_list_go(list);
 
-	snprintf(buf, 100, "Tizen UI :: scale[%1.1f]", elm_config_scale_get());
+	snprintf(buf, 100, "Embryo examples :: scale[%1.1f]", elm_config_scale_get());
 	nf_it = elm_naviframe_item_push(nf, buf, NULL, NULL, list, NULL);
 	elm_naviframe_item_pop_cb_set(nf_it, naviframe_pop_cb, ad->win);
 }
