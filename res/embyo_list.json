@@ -18,6 +18,11 @@
 	    "title": "embryo set state",
 		"description": "This example show how to change the state of a part from embryo code.",
 		"edj_file": "edje/embryo_set_state.edj"
+	},
+	{
+	    "title": "embryo set text",
+		"description": "This example show how to set the text in TEXT part from embryo code.",
+		"edj_file": "edje/embryo_set_text.edj"
 	}	
 ]
 }
