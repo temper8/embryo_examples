@@ -1,13 +1,13 @@
 { "em": [ 
 	{
 		"title": "Embryo ping-pong",
-	 	"description": "ping-pong", 
+	 	"description": "Super-simple Pong implementation in pure embryo.", 
 	 	"edj_file": "edje/embryo_pong.edj"
 	 },
 	{
 		"title": "embryo custom state", 
-		"description": "false2", "edj_file": 
-		"edje/embryo_custom_state.edj"   
+		"description": "This example show how to create a custom state from embryo. Clicking on the 3 labels will rotate the object in the given direction.", 
+		"edj_file":	"edje/embryo_custom_state.edj"   
 	},
 	{
 	    "title": "johndoe3",
