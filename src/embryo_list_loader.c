@@ -28,8 +28,6 @@ static const char *JSON_STRING =
 
 static char JSON_STRING_BUFFER[4000] = {0, };
 
-
-
 int fileReadToBuffer(char *buf, const char *file_name){
 
 	char file_path[PATH_MAX] = {0, };
@@ -68,9 +66,6 @@ int fileReadToBuffer(char *buf, const char *file_name){
  return file_size;
 }
 
-
-
-
 static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	if (tok->type == JSMN_STRING && (int) strlen(s) == tok->end - tok->start &&
 			strncmp(json + tok->start, s, tok->end - tok->start) == 0) {
@@ -87,7 +82,6 @@ int embryo_json_parse(char *JSON_STRING, int json_len){
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
 	jsmn_init(&p);
 
-	//r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
 	r = jsmn_parse(&p, JSON_STRING, json_len, t, sizeof(t)/sizeof(t[0]));
 	if (r < 0) {
 		DBG("Failed to parse JSON: %d\n", r);
