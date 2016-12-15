@@ -26,7 +26,7 @@ static const char *JSON_STRING =
 	"\"groups\": [\"users\", \"wheel\", \"audio\", \"video\"]}";
 */
 
-static char JSON_STRING[4000] = {0, };
+static char JSON_STRING_BUFFER[4000] = {0, };
 
 
 
@@ -79,21 +79,16 @@ static int jsoneq(const char *json, jsmntok_t *tok, const char *s) {
 	return -1;
 }
 
-int embryo_list_loader() {
-
+int embryo_json_parse(char *JSON_STRING, int json_len){
 	int number_of_embryo = 0;
 	int i;
 	int r;
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
-
-	int len = fileReadToBuffer(JSON_STRING, "embyo_list.json");
-
-	DBG("%s", JSON_STRING);
-
 	jsmn_init(&p);
+
 	//r = jsmn_parse(&p, JSON_STRING, strlen(JSON_STRING), t, sizeof(t)/sizeof(t[0]));
-	r = jsmn_parse(&p, JSON_STRING, len, t, sizeof(t)/sizeof(t[0]));
+	r = jsmn_parse(&p, JSON_STRING, json_len, t, sizeof(t)/sizeof(t[0]));
 	if (r < 0) {
 		DBG("Failed to parse JSON: %d\n", r);
 		return 1;
@@ -102,7 +97,7 @@ int embryo_list_loader() {
 	/* Assume the top-level element is an object */
 	if (r < 1 || t[0].type != JSMN_OBJECT) {
 		DBG("Object expected\n");
-		return 1;
+		return 0;
 	}
 
 	/* Loop over all keys of the root object */
@@ -115,23 +110,20 @@ int embryo_list_loader() {
 					int k = 3;
 					int n;
 					number_of_embryo = t[1+1].size;
-
 					embryo_list = (embryo_item_t*) malloc(number_of_embryo * sizeof(embryo_item_t));
-
 					for (n = 0;  n< number_of_embryo; n++) {
-						jsmntok_t *g = &t[k];
-						DBG("* %.*s\n", g->end - g->start, JSON_STRING + g->start);
-						DBG("- size: %d", g->size);
-						int count = 2*g->size;
-						int j;
-						for (j = 0; j < count; j++) {
-							i = k + j + 1;
-								if (jsoneq(JSON_STRING, &t[i], "title") == 0) {
+					jsmntok_t *g = &t[k];
+					DBG("* %.*s\n", g->end - g->start, JSON_STRING + g->start);
+					DBG("- size: %d", g->size);
+					int count = 2*g->size;
+					int j;
+					for (j = 0; j < count; j++) {
+						i = k + j + 1;
+							if (jsoneq(JSON_STRING, &t[i], "title") == 0) {
 								DBG("- title: %.*s\n", t[i+1].end-t[i+1].start, JSON_STRING + t[i+1].start);
 								embryo_list[n].title = strndup(	JSON_STRING + t[i+1].start, t[i+1].end-t[i+1].start);
 								j++;
 							} else  if (jsoneq(JSON_STRING, &t[i], "description") == 0) {
-
 								DBG("- description: %.*s\n", t[i+1].end-t[i+1].start,	JSON_STRING + t[i+1].start);
 								j++;
 							} else if (jsoneq(JSON_STRING, &t[i], "edj_file") == 0) {
@@ -140,15 +132,23 @@ int embryo_list_loader() {
 								j++;
 							} else {
 								DBG("Unexpected key: %.*s\n", t[i].end-t[i].start,
-										JSON_STRING + t[i].start);
-							}
+								JSON_STRING + t[i].start);
 						}
-						k += count +1;
 					}
+					k += count +1;
 				}
-	}
-
+			}
+		}
 	return number_of_embryo;
+}
+
+int embryo_list_loader() {
+
+	int len = fileReadToBuffer(JSON_STRING_BUFFER, "embyo_list.json");
+
+	DBG("%s", JSON_STRING_BUFFER);
+
+	return embryo_json_parse(JSON_STRING_BUFFER, len);
 }
 
 
