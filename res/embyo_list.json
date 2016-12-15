@@ -23,6 +23,11 @@
 	    "title": "embryo set text",
 		"description": "This example show how to set the text in TEXT part from embryo code.",
 		"edj_file": "edje/embryo_set_text.edj"
+	},
+	{
+	    "title": "embryo timer",
+		"description": "This example show the usage of timers in embryo.",
+		"edj_file": "edje/embryo_timer.edj"
 	}	
 ]
 }
