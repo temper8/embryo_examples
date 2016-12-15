@@ -30,7 +30,7 @@ static char JSON_STRING[4000] = {0, };
 
 
 
-int readJSONtoBuffer(const char *file_name){
+int fileReadToBuffer(char *buf, const char *file_name){
 
 	char file_path[PATH_MAX] = {0, };
 
@@ -63,7 +63,7 @@ int readJSONtoBuffer(const char *file_name){
 
 	DBG("file_size =%d ", file_size);
 
-	fread(JSON_STRING, file_size, 1, fp);
+	fread(buf, file_size, 1, fp);
 
  return file_size;
 }
@@ -87,7 +87,7 @@ int embryo_list_loader() {
 	jsmn_parser p;
 	jsmntok_t t[128]; /* We expect no more than 128 tokens */
 
-	int len = readJSONtoBuffer("embyo_list.json");
+	int len = fileReadToBuffer(JSON_STRING, "embyo_list.json");
 
 	DBG("%s", JSON_STRING);
 
