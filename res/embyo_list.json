@@ -10,9 +10,9 @@
 		"edj_file":	"edje/embryo_custom_state.edj"   
 	},
 	{
-	    "title": "johndoe3",
-		"description": "false3",
-		"edj_file": "title3.edc"
+	    "title": "embryo run program",
+		"description": "This example show how to run an edje program from embryo code.",
+		"edj_file": "edje/embryo_run_program.edj"
 	}
 ]
 }
