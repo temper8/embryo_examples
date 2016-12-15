@@ -28,6 +28,17 @@
 	    "title": "embryo timer",
 		"description": "This example show the usage of timers in embryo.",
 		"edj_file": "edje/embryo_timer.edj"
+	},
+	{
+	    "title": "toggle using filter",
+		"description": "This example show how to toggle the state of a part using the 'filter' param in edje programs",
+		"edj_file": "edje/toggle_using_filter.edj"
+	},
+	{
+	    "title": "lua script (don't work)",
+		"description": "This example show the usage of lua scripting to create and animate some objects in the canvas.",
+		"edj_file": "edje/lua_script.edj"
 	}	
+		
 ]
 }
