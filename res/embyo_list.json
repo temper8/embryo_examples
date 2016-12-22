@@ -35,10 +35,20 @@
 		"edj_file": "edje/toggle_using_filter.edj"
 	},
 	{
-	    "title": "lua script (don't work)",
-		"description": "This example show the usage of lua scripting to create and animate some objects in the canvas.",
-		"edj_file": "edje/lua_script.edj"
-	}	
+	    "title": "script_exp1",
+		"description": "script exp1.",
+		"edj_file": "edje/script_exp1.edj"
+	},
+	{
+	    "title": "script_exp2",
+		"description": "script exp2.",
+		"edj_file": "edje/script_exp2.edj"
+	},
+	{
+	    "title": "script_exp3",
+		"description": "script exp3.",
+		"edj_file": "edje/script_exp3.edj"
+	}			
 		
 ]
 }
