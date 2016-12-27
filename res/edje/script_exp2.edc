@@ -1,6 +1,9 @@
 collections {
    base_scale: 1.8;
    group { name: "main";
+      script {
+         public down_x = 0, down_y = 0;
+      }
       parts {
          part { name: "bg_rect";
             type: RECT;
@@ -48,11 +51,11 @@ collections {
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
-               min: 50 50;
+               min: 150 450;
                max: 50 50;
                fixed: 1 1;
-               rel1.relative: 0.5 0.5;
-               rel1.offset: 50 50;
+               rel1.relative: 0.1 0.1;
+               rel1.offset: 10 10;
                //         rel2.relative: 0.5 0.5;
                color: 255 0 255 128;
             }
@@ -72,29 +75,40 @@ collections {
       }
       program { name: "test mouse down";
          signal: "mouse,down,1";
-         source: "movable_box";
+         source: "bottom_rect";
          script {
+            new mx, my;
+            get_mouse(mx, my);
+            set_int(down_x, mx);
+            set_int(down_y, my);
             set_text(PART:"label", "mouse,down");
          }
       }
       program { name: "test mouse up";
          signal: "mouse,up,1";
-         source: "movable_box";
+         source: "bottom_rect";
          script {
+            set_int(down_x, 0);
+            set_int(down_y, 0);
             set_text(PART:"label", "mouse,up");
+            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, 10,10);            
          }
       }
       program { name: "test mouse move";
          signal: "mouse,move";
          source: "bottom_rect";
-         script {
-            new mx, my;
+         script {       
+            new x0;
+            x0 = get_int(down_x);
+            if (x0 == 0) return ;
+            new mx, my, dx;
             get_mouse(mx, my);
+            dx = mx - x0;
             new buf[128];
-            snprintf(buf, sizeof(buf),"mouse: %d %d", mx, my);
+            snprintf(buf, sizeof(buf),"mouse: %d %d", dx, my);
             set_text(PART:"label", buf);
             custom_state(PART:"movable_box", "default", 0.0);
-            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, mx-200,my-500);
+            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, dx+10,10);
             //    set_state_val(PART:"right_bottom_point_base", STATE_REL2_OFFSET, 100, 150);
             set_state(PART:"movable_box", "custom", 0.0);
          }
