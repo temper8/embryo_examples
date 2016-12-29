@@ -5,9 +5,24 @@ collections {
    group { name: "main";
       script {
          public down_x = 0, down_y = 0;
+         public dir_move = 0;
+         public left_page_move(dx) {
+            custom_state(PART:"movable_box", "default", 0.0);
+            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            set_state_val(PART:"movable_box", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            //    set_state_val(PART:"right_bottom_point_base", STATE_REL2_OFFSET, 100, 150);
+            set_state(PART:"movable_box", "custom", 0.0);           
+         }
+         public main_page_move(dx) {
+            custom_state(PART:"main_rect", "default", 0.0);
+            set_state_val(PART:"main_rect", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            set_state_val(PART:"main_rect", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            //    set_state_val(PART:"right_bottom_point_base", STATE_REL2_OFFSET, 100, 150);
+            set_state(PART:"main_rect", "custom", 0.0);           
+         }         
       }
       parts {
-         part { name: "bg_rect";
+         part { name: "main_rect";
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
@@ -54,16 +69,10 @@ collections {
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
-               rel1.relative: 0.1 0.1;
-               rel2.relative: 0.9 0.9;
-               color: 255 0 255 128;
-            }
-            description { state: "state2" 1.0;
-               fixed: 1 1;
                rel1.relative: -0.7 0.1;
                rel2.relative: 0.1 0.9;
                color: 255 0 255 128;
-            }            
+            }
          }
          part { name: "text_sample";
             type: TEXT;
@@ -112,7 +121,7 @@ collections {
             set_int(down_x, mx);
             set_int(down_y, my);
             set_text(PART:"label", "mouse,down");
-            run_program(PROGRAM:"goto_default");
+           // run_program(PROGRAM:"goto_default");
          }
       }
       program { name: "test mouse up";
@@ -121,8 +130,9 @@ collections {
          script {
             set_int(down_x, 0);
             set_int(down_y, 0);
+            set_int(dir_move,0);
             set_text(PART:"label", "mouse,up");
-            run_program(PROGRAM:"goto_state2");
+            run_program(PROGRAM:"goto_default");
 //            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, 10,10);            
          }
       }
@@ -136,14 +146,17 @@ collections {
             new mx, my, dx;
             get_mouse(mx, my);
             dx = mx - x0;
+            if (get_int(dir_move)==0) {
+               if (dx>0) set_int(dir_move,1)
+               else set_int(dir_move,-1);
+            }
             new buf[128];
-            snprintf(buf, sizeof(buf),"mouse: %d %d", dx, my);
+            snprintf(buf, sizeof(buf),"mouse: %d %d",get_int(dir_move), dx);
             set_text(PART:"label", buf);
-            custom_state(PART:"movable_box", "default", 0.0);
-            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
-            set_state_val(PART:"movable_box", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
-            //    set_state_val(PART:"right_bottom_point_base", STATE_REL2_OFFSET, 100, 150);
-            set_state(PART:"movable_box", "custom", 0.0);
+            if (get_int(dir_move) > 0)
+            	left_page_move(dx);
+            else 
+            	main_page_move(dx);
          }
       }
    }
