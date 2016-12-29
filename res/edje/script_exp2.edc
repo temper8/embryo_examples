@@ -1,5 +1,11 @@
 #define MY_OFFSET_DEFAULT 000
 #define MY_OFFSET_LEFT -200
+styles {
+   	style { name: "text_style";
+      	   base: "font=Tizen:style=Regular font_size=25 color=#ffffff ellipsis=1.0";
+      	}
+}
+
 collections {
    base_scale: 1.0;
    group { name: "main";
@@ -7,22 +13,22 @@ collections {
          public down_x = 0, down_y = 0;
          public dir_move = 0;
          public left_page_move(dx) {
-            custom_state(PART:"movable_box", "default", 0.0);
-            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
-            set_state_val(PART:"movable_box", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            custom_state(PART:"left_page", "default", 0.0);
+            set_state_val(PART:"left_page", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            set_state_val(PART:"left_page", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
             //    set_state_val(PART:"right_bottom_point_base", STATE_REL2_OFFSET, 100, 150);
-            set_state(PART:"movable_box", "custom", 0.0);           
+            set_state(PART:"left_page", "custom", 0.0);           
          }
          public main_page_move(dx) {
-            custom_state(PART:"main_rect", "default", 0.0);
-            set_state_val(PART:"main_rect", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
-            set_state_val(PART:"main_rect", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            custom_state(PART:"main_page", "default", 0.0);
+            set_state_val(PART:"main_page", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
+            set_state_val(PART:"main_page", STATE_REL2_OFFSET, dx+MY_OFFSET_DEFAULT,0);
             //    set_state_val(PART:"right_bottom_point_base", STATE_REL2_OFFSET, 100, 150);
-            set_state(PART:"main_rect", "custom", 0.0);           
+            set_state(PART:"main_page", "custom", 0.0);           
          }         
       }
       parts {
-         part { name: "main_rect";
+         part { name: "main_page";
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
@@ -35,7 +41,7 @@ collections {
                rel2 {
                   relative: 0.9 0.9;
                }
-               color: 0 0 0 255;
+               color: 255 255 255 255;
             }
          }
          part { name: "top_rect";
@@ -65,7 +71,7 @@ collections {
             }
          }
 
-         part { name: "movable_box";
+         part { name: "left_page";
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
@@ -78,8 +84,8 @@ collections {
             type: TEXT;
             description { state: "default" 0.0;
                color: 255 255 255 255;
-               rel1.to: "movable_box";
-               rel2.to: "movable_box";
+               rel1.to: "left_page";
+               rel2.to: "left_page";
                text {
                   text: "text_sample";
                   font: "Sans";
@@ -88,7 +94,20 @@ collections {
                }
             }
          }         
-
+         part { name: "text";
+            type: TEXTBLOCK;
+            description { state: "default" 0.0;
+               color: 0 0 0 255;
+               align: 0.5 0.5;
+               rel1.to: "main_page";
+               rel2.to: "main_page";
+               text 
+               {
+                 style: "text_style";
+                  text: "Text Text Text<br>text<br>text";
+               }
+            }
+         }
          part { name: "bottom_rect";
             type: RECT;
             scale: 1;
@@ -104,12 +123,12 @@ collections {
       }
       program { name: "goto_default";
          action: STATE_SET "default" 0.0;
-         target: "movable_box";
+         target: "left_page";
          transition: SINUSOIDAL 0.3;
       }
       program { name: "goto_state2";
          action: STATE_SET "state2" 1.0;
-         target: "movable_box";
+         target: "left_page";
          transition: SINUSOIDAL 0.3;
       }
       program { name: "test mouse down";
@@ -154,9 +173,9 @@ collections {
             snprintf(buf, sizeof(buf),"mouse: %d %d",get_int(dir_move), dx);
             set_text(PART:"label", buf);
             if (get_int(dir_move) > 0)
-            	left_page_move(dx);
+            left_page_move(dx);
             else 
-            	main_page_move(dx);
+            main_page_move(dx);
          }
       }
    }
