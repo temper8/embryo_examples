@@ -12,10 +12,12 @@ collections {
       script {
          public down_x = 0, down_y = 0;
          public dir_move = 0;
+         public page_width = 0;
          public show_geometry(){
             /* get field geometry */
             new fx, fy, fw, fh;
             get_geometry(PART:"main_page", fx, fy, fw, fh);
+            set_int(page_width,fw);
             new buf[128];
             snprintf(buf, sizeof(buf),"x=%d y=%d w=%d h=%d",fx, fy, fw, fh);
             set_text(PART:"label2", buf);
@@ -100,6 +102,11 @@ collections {
                rel2.relative: 0.1 0.9;
                color: 255 0 255 128;
             }
+            description { state: "center" 1.0;
+               rel1.relative: 0.1 0.1;
+               rel2.relative: 0.9 0.9;
+               color: 255 0 255 128;
+            }
          }
          part { name: "text_sample";
             type: TEXT;
@@ -142,15 +149,15 @@ collections {
             }
          }
       }
-      program { name: "goto_default";
+      program { name: "left_page_goto_default";
          action: STATE_SET "default" 0.0;
          target: "left_page";
-         transition: SINUSOIDAL 0.3;
+         transition: SINUSOIDAL 0.2;
       }
-      program { name: "goto_state2";
-         action: STATE_SET "state2" 1.0;
+      program { name: "left_page_goto_center";
+         action: STATE_SET "center" 1.0;
          target: "left_page";
-         transition: SINUSOIDAL 0.3;
+         transition: SINUSOIDAL 0.2;
       }
       program { name: "test mouse down";
          signal: "mouse,down,1";
@@ -169,12 +176,22 @@ collections {
          signal: "mouse,up,1";
          source: "bottom_rect";
          script {
+            set_text(PART:"label", "mouse,up");
+            
+            new mx, my, dx;
+            get_mouse(mx, my);
+            dx = mx - get_int(down_x);
+            if (get_int(dir_move) > 0) {
+               if (2*dx < get_int(page_width))
+               	run_program(PROGRAM:"left_page_goto_default");
+               else
+               	run_program(PROGRAM:"left_page_goto_center");
+            }
+      	
+            
             set_int(down_x, 0);
             set_int(down_y, 0);
             set_int(dir_move,0);
-            set_text(PART:"label", "mouse,up");
-            run_program(PROGRAM:"goto_default");
-//            set_state_val(PART:"movable_box", STATE_REL1_OFFSET, 10,10);            
          }
       }
       program { name: "test mouse move";
@@ -195,9 +212,9 @@ collections {
             snprintf(buf, sizeof(buf),"mouse: %d %d",get_int(dir_move), dx);
             set_text(PART:"label", buf);
             if (get_int(dir_move) > 0)
-            left_page_move(dx);
+            	left_page_move(dx);
             else 
-            main_page_move(dx);
+            	main_page_move(dx);
          }
       }
    }
