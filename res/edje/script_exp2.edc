@@ -42,17 +42,16 @@ collections {
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
-               fixed: 1 1;
-               // min: 300 300;
-               // max: 300 300;
-               rel1 {
-                  relative: 0.1 0.1;
-               }
-               rel2 {
-                  relative: 0.9 0.9;
-               }
+               rel1.relative: 0.1 0.1;
+               rel2.relative: 0.9 0.9;
                color: 255 255 255 255;
             }
+            description { state: "left" 1.0;
+               rel1.relative: -0.7 0.1;
+               rel2.relative: 0.1 0.9;
+               color: 255 255 255 128;
+            }
+
          }
          part { name: "top_rect";
             type: RECT;
@@ -90,7 +89,7 @@ collections {
                   text: "label2";
                   font: "Sans";
                   size: 20;
-                  align: 0.5 0.0;
+                  align: 0.5 1.0;
                }
             }
          }
@@ -140,15 +139,26 @@ collections {
             type: RECT;
             scale: 1;
             description { state: "default" 0.0;
-               min: 10 100;
+               min: 10 300;
                fixed: 0 1;
                rel1.relative: 0.0 1.0;
                rel2.relative: 1.0 1.0;
-               align: 0.0 0.5;
-               color: 255 0 0 128;
+               align: 0.0 1.0;
+               color: 255 255 255 64;
             }
          }
       }
+      program { name: "main_page_goto_default";
+         action: STATE_SET "default" 0.0;
+         target: "main_page";
+         transition: SINUSOIDAL 0.2;
+      }
+      program { name: "main_page_goto_center";
+         action: STATE_SET "left" 1.0;
+         target: "main_page";
+         transition: SINUSOIDAL 0.2;
+      }
+
       program { name: "left_page_goto_default";
          action: STATE_SET "default" 0.0;
          target: "left_page";
@@ -177,18 +187,25 @@ collections {
          source: "bottom_rect";
          script {
             set_text(PART:"label", "mouse,up");
-            
+
             new mx, my, dx;
             get_mouse(mx, my);
-            dx = mx - get_int(down_x);
+            dx = -(mx - get_int(down_x));
             if (get_int(dir_move) > 0) {
                if (2*dx < get_int(page_width))
-               	run_program(PROGRAM:"left_page_goto_default");
+               run_program(PROGRAM:"left_page_goto_default");
                else
-               	run_program(PROGRAM:"left_page_goto_center");
+               run_program(PROGRAM:"left_page_goto_center");
             }
-      	
-            
+            else {
+               if (2*dx < get_int(page_width))
+               run_program(PROGRAM:"main_page_goto_default");
+               else
+               run_program(PROGRAM:"main_page_goto_center");               
+            }
+
+
+
             set_int(down_x, 0);
             set_int(down_y, 0);
             set_int(dir_move,0);
@@ -212,9 +229,9 @@ collections {
             snprintf(buf, sizeof(buf),"mouse: %d %d",get_int(dir_move), dx);
             set_text(PART:"label", buf);
             if (get_int(dir_move) > 0)
-            	left_page_move(dx);
+            left_page_move(dx);
             else 
-            	main_page_move(dx);
+            main_page_move(dx);
          }
       }
    }
