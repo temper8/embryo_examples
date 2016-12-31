@@ -1,9 +1,9 @@
 #define MY_OFFSET_DEFAULT 000
 #define MY_OFFSET_LEFT -200
 styles {
-   	style { name: "text_style";
+   style { name: "text_style";
       	   base: "font=Tizen:style=Regular font_size=25 color=#ffffff ellipsis=1.0";
-      	}
+   }
 }
 
 collections {
@@ -12,6 +12,14 @@ collections {
       script {
          public down_x = 0, down_y = 0;
          public dir_move = 0;
+         public show_geometry(){
+            /* get field geometry */
+            new fx, fy, fw, fh;
+            get_geometry(PART:"main_page", fx, fy, fw, fh);
+            new buf[128];
+            snprintf(buf, sizeof(buf),"x=%d y=%d w=%d h=%d",fx, fy, fw, fh);
+            set_text(PART:"label2", buf);
+         }
          public left_page_move(dx) {
             custom_state(PART:"left_page", "default", 0.0);
             set_state_val(PART:"left_page", STATE_REL1_OFFSET, dx+MY_OFFSET_DEFAULT,0);
@@ -70,7 +78,20 @@ collections {
                }
             }
          }
-
+         part { name: "label2";
+            type: TEXT;
+            description { state: "default" 0.0;
+               color: 0 0 0 255;
+               rel1.to: "bottom_rect";
+               rel2.to: "bottom_rect";
+               text {
+                  text: "label2";
+                  font: "Sans";
+                  size: 20;
+                  align: 0.5 0.0;
+               }
+            }
+         }
          part { name: "left_page";
             type: RECT;
             scale: 1;
@@ -103,7 +124,7 @@ collections {
                rel2.to: "main_page";
                text 
                {
-                 style: "text_style";
+                  style: "text_style";
                   text: "Text Text Text<br>text<br>text";
                }
             }
@@ -116,7 +137,7 @@ collections {
                fixed: 0 1;
                rel1.relative: 0.0 1.0;
                rel2.relative: 1.0 1.0;
-               align: 0.8 1.0;
+               align: 0.0 0.5;
                color: 255 0 0 128;
             }
          }
@@ -140,7 +161,8 @@ collections {
             set_int(down_x, mx);
             set_int(down_y, my);
             set_text(PART:"label", "mouse,down");
-           // run_program(PROGRAM:"goto_default");
+            show_geometry();
+           // run_program(PROGRAM:"");
          }
       }
       program { name: "test mouse up";
