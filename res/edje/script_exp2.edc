@@ -190,7 +190,7 @@ collections {
 
             new mx, my, dx;
             get_mouse(mx, my);
-            dx = -(mx - get_int(down_x));
+            dx = mx - get_int(down_x);
             if (get_int(dir_move) > 0) {
                if (2*dx < get_int(page_width))
                run_program(PROGRAM:"left_page_goto_default");
@@ -198,7 +198,7 @@ collections {
                run_program(PROGRAM:"left_page_goto_center");
             }
             else {
-               if (2*dx < get_int(page_width))
+               if (-2*dx < get_int(page_width))
                run_program(PROGRAM:"main_page_goto_default");
                else
                run_program(PROGRAM:"main_page_goto_center");               
