@@ -47,6 +47,11 @@ collections {
             transition: SINUSOIDAL 1.0;
             target: "rect";
          }
+         program { name: "go2";
+            action: STATE_SET "default" 0.17;
+            transition: SINUSOIDAL 1.0;
+            target: "rect";
+         }         
          program {
             signal: "mouse,down,1";
             source: "label";
@@ -56,7 +61,7 @@ collections {
                   set_int(toggle, 1);
                }
                else {
-                  run_program(PROGRAM:"go_left");
+                  run_program(PROGRAM:"go2");
                   set_int(toggle, 0);
                }
             }
